@@ -33,6 +33,7 @@ func main() {
 
 	r := gin.Default()
 	handler.RegisterHandlers(r, ctx)
+	handler.LoginHandlers(r, ctx)
 
 	addr := fmt.Sprintf("%s:%d", c.Host, c.Port)
 	http.ListenAndServe(addr, r)

@@ -23,8 +23,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	// 自动迁移
 	db.AutoMigrate(&model.User{})
 
-	config.DB = db
-
 	return &ServiceContext{
 		Config: c,
 		DB:     db,

@@ -2,8 +2,6 @@ package logic
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 
 	"IM/user-service/cmd/api/internal/svc"
 	"IM/user-service/cmd/api/internal/types"
@@ -32,11 +30,9 @@ func (l *RegisterLogic) Register(req *types.UserRequest) (resp *types.UserRespon
 		return nil, errors.New("username or password is empty")
 	}
 
-	hashedPSW := hashing(req.Password)
-
 	user := model.User{
 		Username: req.Username,
-		Password: hashedPSW,
+		Password: hashing(req.Password),
 	}
 
 	result := l.svcCtx.DB.Create(&user)
@@ -52,10 +48,4 @@ func (l *RegisterLogic) Register(req *types.UserRequest) (resp *types.UserRespon
 
 	return resp, nil
 
-}
-
-func hashing(password string) string {
-	hash := sha256.New()
-	hash.Write([]byte(password))
-	return hex.EncodeToString(hash.Sum(nil))
 }

@@ -11,7 +11,6 @@ import (
 )
 
 func LoginHandlers(r *gin.Engine, ctx *svc.ServiceContext) {
-
 	r.POST("/api/user/login", func(c *gin.Context) {
 		var req types.UserRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
