@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "/pb/user";
+
+// 定义用户请求和响应结构
+message UserRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message UserResponse {
+  int64 id = 1;
+  string username = 2;
+}
+
+// 定义用户服务
+service User {
+  rpc Register(UserRequest) returns (UserResponse);
+  rpc Login(UserRequest) returns (UserResponse);
+}

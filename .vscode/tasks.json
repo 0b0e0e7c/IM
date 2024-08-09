@@ -2,9 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build user",
+      "label": "Build user service",
       "type": "shell",
-      "command": "go build -o bin/user.exe ./user-service/cmd/api/user.go",
+      "command": "go build -o bin/userservice.exe ./user-service/cmd/rpc/user.go",
       "group": {
         "kind": "build",
         "isDefault": true
@@ -13,14 +13,36 @@
       "detail": "bin/user.exe"
     },
     {
-      "label": "Run user",
+      "label": "Run user service",
       "type": "shell",
-      "command": "${workspaceFolder}/bin/user.exe",
+      "command": "${workspaceFolder}/bin/userservice.exe",
       "group": {
         "kind": "test",
         "isDefault": true
       },
-      "dependsOn": "Build user",
+      "dependsOn": "Build user service",
+      "detail": "run "
+    },
+    {
+      "label": "Build userapi",
+      "type": "shell",
+      "command": "go build -o bin/userapi.exe ./user-service/cmd/gin/.",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$go"],
+      "detail": "bin/userapi.exe"
+    },
+    {
+      "label": "Run userapi",
+      "type": "shell",
+      "command": "${workspaceFolder}/bin/userapi.exe",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "dependsOn": "Build userapi",
       "detail": "运行编译后的 Go 程序"
     }
   ]
