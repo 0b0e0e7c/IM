@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"github.com/0b0e0e7c/IM/user-service/cmd/rpc/pb/user"
 	"github.com/0b0e0e7c/IM/user-service/cmd/rpc/internal/logic"
 	"github.com/0b0e0e7c/IM/user-service/cmd/rpc/internal/svc"
+	"github.com/0b0e0e7c/IM/user-service/cmd/rpc/pb/user"
 )
 
 type UserServer struct {

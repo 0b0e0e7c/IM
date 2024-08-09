@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package user;
 
-option go_package = "/pb/user";
+option go_package = "/user";
 
 // 定义用户请求和响应结构
 message UserRequest {

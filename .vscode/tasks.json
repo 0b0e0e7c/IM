@@ -10,7 +10,7 @@
         "isDefault": true
       },
       "problemMatcher": ["$go"],
-      "detail": "bin/user.exe"
+      "detail": "build user service",
     },
     {
       "label": "Run user service",
@@ -21,7 +21,7 @@
         "isDefault": true
       },
       "dependsOn": "Build user service",
-      "detail": "run "
+      "detail": "run user service"
     },
     {
       "label": "Build userapi",
@@ -32,7 +32,7 @@
         "isDefault": true
       },
       "problemMatcher": ["$go"],
-      "detail": "bin/userapi.exe"
+      "detail": "build userapi"
     },
     {
       "label": "Run userapi",
@@ -43,7 +43,7 @@
         "isDefault": true
       },
       "dependsOn": "Build userapi",
-      "detail": "运行编译后的 Go 程序"
+      "detail": "run userapi"
     }
   ]
 }
