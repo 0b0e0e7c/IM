@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build user service",
+      "label": "Build user rpc",
       "type": "shell",
       "command": "go build -o bin/userservice.exe ./user-service/cmd/rpc/user.go",
       "group": {
@@ -10,18 +10,16 @@
         "isDefault": true
       },
       "problemMatcher": ["$go"],
-      "detail": "build user service",
     },
     {
-      "label": "Run user service",
+      "label": "Run user rpc",
       "type": "shell",
       "command": "${workspaceFolder}/bin/userservice.exe",
       "group": {
         "kind": "test",
         "isDefault": true
       },
-      "dependsOn": "Build user service",
-      "detail": "run user service"
+      "dependsOn": "Build user rpc",
     },
     {
       "label": "Build userapi",
@@ -32,7 +30,6 @@
         "isDefault": true
       },
       "problemMatcher": ["$go"],
-      "detail": "build userapi"
     },
     {
       "label": "Run userapi",
@@ -43,7 +40,6 @@
         "isDefault": true
       },
       "dependsOn": "Build userapi",
-      "detail": "run userapi"
     }
   ]
 }

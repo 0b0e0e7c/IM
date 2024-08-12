@@ -13,7 +13,7 @@ var rpcClient user.UserClient
 
 func main() {
 	// 创建 RPC 客户端配置
-	client, err := zrpc.NewClient(zrpc.RpcClientConf{
+	EtcdClient, err := zrpc.NewClient(zrpc.RpcClientConf{
 		Etcd: discov.EtcdConf{
 			Hosts: []string{"127.0.0.1:2379"},
 			Key:   "user.rpc",
@@ -22,7 +22,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	rpcClient = user.NewUserClient(client.Conn())
+	rpcClient = user.NewUserClient(EtcdClient.Conn())
 
 	r := gin.Default()
 

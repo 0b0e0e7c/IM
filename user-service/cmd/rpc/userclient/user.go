@@ -13,12 +13,14 @@ import (
 )
 
 type (
-	UserRequest  = user.UserRequest
-	UserResponse = user.UserResponse
+	LoginRequest     = user.LoginRequest
+	LoginResponse    = user.LoginResponse
+	RegisterRequest  = user.RegisterRequest
+	RegisterResponse = user.RegisterResponse
 
 	User interface {
-		Register(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
-		Login(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+		Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	}
 
 	defaultUser struct {
@@ -32,12 +34,12 @@ func NewUser(cli zrpc.Client) User {
 	}
 }
 
-func (m *defaultUser) Register(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
+func (m *defaultUser) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
 	client := user.NewUserClient(m.cli.Conn())
 	return client.Register(ctx, in, opts...)
 }
 
-func (m *defaultUser) Login(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
+func (m *defaultUser) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	client := user.NewUserClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
 }

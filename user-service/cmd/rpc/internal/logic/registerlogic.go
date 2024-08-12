@@ -27,32 +27,38 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 	}
 }
 
-func (l *RegisterLogic) Register(in *user.UserRequest) (resp *user.UserResponse, err error) {
+func (l *RegisterLogic) Register(in *user.RegisterRequest) (resp *user.RegisterResponse, err error) {
 	if in.Username == "" || in.Password == "" {
 		return nil, errors.New("username or password is empty")
 	}
 
 	newUser := model.User{
 		Username: in.Username,
-		Password: hashing(in.Password),
+		Password: hashing(in.Username, in.Password),
 	}
 
 	result := l.svcCtx.DB.Create(&newUser)
 	if result.Error != nil {
 		logx.Error("create error:", result.Error)
-		return nil, result.Error
+		resp = &user.RegisterResponse{
+			Success: false,
+		}
+		return resp, result.Error
 	}
 
-	resp = &user.UserResponse{
-		Id:       int64(newUser.ID),
+	resp = &user.RegisterResponse{
+		UserId:   int64(newUser.ID),
 		Username: newUser.Username,
+		Success:  true,
 	}
 
 	return resp, nil
 }
 
-func hashing(password string) string {
+func hashing(username, password string) string {
 	hash := sha256.New()
-	hash.Write([]byte(password))
+
+	hash.Write([]byte(username + password))
+
 	return hex.EncodeToString(hash.Sum(nil))
 }
