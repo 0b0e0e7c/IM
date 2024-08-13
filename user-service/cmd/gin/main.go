@@ -32,6 +32,9 @@ func main() {
 	r.POST("/api/user/login", func(ctx *gin.Context) {
 		Login(ctx, rpcClient)
 	})
+	r.POST("/api/user/ValidateJWT", func(ctx *gin.Context) {
+		ValidateJWT(ctx, rpcClient)
+	})
 
 	r.Run(":8888")
 }

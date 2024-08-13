@@ -33,9 +33,6 @@ func (l *LoginLogic) Login(req *user.LoginRequest) (resp *user.LoginResponse, er
 	if result.Error != nil {
 		return nil, errors.New("invalid username or password")
 	}
-	if result.Error != nil {
-		return nil, result.Error
-	}
 
 	// 生成JWT令牌
 	token, err := auth.GenerateToken(int64(loginUser.ID), loginUser.Username)

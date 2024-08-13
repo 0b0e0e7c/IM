@@ -53,3 +53,11 @@ func Expire(c *Claims) bool {
 func RefreshToken(userID int64, username string) (string, error) {
 	return GenerateToken(userID, username)
 }
+
+func ValidateToken(tokenString string) (bool, error) {
+	c, err := ParseToken(tokenString)
+	if c != nil {
+		return true, nil
+	}
+	return false, err
+}

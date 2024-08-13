@@ -39,11 +39,7 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (resp *user.RegisterR
 
 	result := l.svcCtx.DB.Create(&newUser)
 	if result.Error != nil {
-		logx.Error("create error:", result.Error)
-		resp = &user.RegisterResponse{
-			Success: false,
-		}
-		return resp, result.Error
+		return nil, result.Error
 	}
 
 	resp = &user.RegisterResponse{

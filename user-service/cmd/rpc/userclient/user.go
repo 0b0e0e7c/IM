@@ -17,10 +17,13 @@ type (
 	LoginResponse    = user.LoginResponse
 	RegisterRequest  = user.RegisterRequest
 	RegisterResponse = user.RegisterResponse
+	ValidateRequest  = user.ValidateRequest
+	ValidateResponse = user.ValidateResponse
 
 	User interface {
 		Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+		ValidateJWT(ctx context.Context, in *ValidateRequest, opts ...grpc.CallOption) (*ValidateResponse, error)
 	}
 
 	defaultUser struct {
@@ -42,4 +45,9 @@ func (m *defaultUser) Register(ctx context.Context, in *RegisterRequest, opts ..
 func (m *defaultUser) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	client := user.NewUserClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
+}
+
+func (m *defaultUser) ValidateJWT(ctx context.Context, in *ValidateRequest, opts ...grpc.CallOption) (*ValidateResponse, error) {
+	client := user.NewUserClient(m.cli.Conn())
+	return client.ValidateJWT(ctx, in, opts...)
 }

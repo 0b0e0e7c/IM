@@ -28,8 +28,17 @@ message LoginResponse {
   string token = 4;
 }
 
+// validate JWT
+message ValidateRequest {
+  string token = 1;
+}
+
+message ValidateResponse {
+  bool valid = 1;
+}
 
 service User {
   rpc Register(RegisterRequest) returns (RegisterResponse) {}
   rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc ValidateJWT(ValidateRequest) returns (ValidateResponse) {}
 }

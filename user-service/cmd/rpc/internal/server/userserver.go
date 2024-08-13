@@ -31,3 +31,8 @@ func (s *UserServer) Login(ctx context.Context, in *user.LoginRequest) (*user.Lo
 	l := logic.NewLoginLogic(ctx, s.svcCtx)
 	return l.Login(in)
 }
+
+func (s *UserServer) ValidateJWT(ctx context.Context, in *user.ValidateRequest) (*user.ValidateResponse, error) {
+	l := logic.NewValidateJWTLogic(ctx, s.svcCtx)
+	return l.ValidateJWT(in)
+}
