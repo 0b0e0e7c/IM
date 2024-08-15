@@ -11,23 +11,23 @@ import (
 	"github.com/0b0e0e7c/IM/service/friend-service/pb/friend"
 )
 
-type FriendServer struct {
+type FriendServiceServer struct {
 	svcCtx *svc.ServiceContext
-	friend.UnimplementedFriendServer
+	friend.UnimplementedFriendServiceServer
 }
 
-func NewFriendServer(svcCtx *svc.ServiceContext) *FriendServer {
-	return &FriendServer{
+func NewFriendServiceServer(svcCtx *svc.ServiceContext) *FriendServiceServer {
+	return &FriendServiceServer{
 		svcCtx: svcCtx,
 	}
 }
 
-func (s *FriendServer) AddFriend(ctx context.Context, in *friend.AddFriendRequest) (*friend.AddFriendResponse, error) {
+func (s *FriendServiceServer) AddFriend(ctx context.Context, in *friend.AddFriendRequest) (*friend.AddFriendResponse, error) {
 	l := logic.NewAddFriendLogic(ctx, s.svcCtx)
 	return l.AddFriend(in)
 }
 
-func (s *FriendServer) GetFriends(ctx context.Context, in *friend.GetFriendsRequest) (*friend.GetFriendsResponse, error) {
+func (s *FriendServiceServer) GetFriends(ctx context.Context, in *friend.GetFriendsRequest) (*friend.GetFriendsResponse, error) {
 	l := logic.NewGetFriendsLogic(ctx, s.svcCtx)
 	return l.GetFriends(in)
 }

@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "./etc/friend.yaml", "the config file")
+var configFile = flag.String("f", "etc/friend.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		friend.RegisterFriendServer(grpcServer, server.NewFriendServer(ctx))
+		friend.RegisterFriendServiceServer(grpcServer, server.NewFriendServiceServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Register(c *gin.Context, client user.UserClient) {
+func Register(c *gin.Context, client user.UserServiceClient) {
 	var req struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -51,7 +51,7 @@ func Register(c *gin.Context, client user.UserClient) {
 	})
 }
 
-func Login(c *gin.Context, client user.UserClient) {
+func Login(c *gin.Context, client user.UserServiceClient) {
 	var req struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -93,7 +93,7 @@ func Login(c *gin.Context, client user.UserClient) {
 	})
 }
 
-func ValidateJWT(c *gin.Context, client user.UserClient) {
+func ValidateJWT(c *gin.Context, client user.UserServiceClient) {
 	var req struct {
 		Token string `json:"token"`
 	}

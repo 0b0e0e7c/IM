@@ -11,28 +11,28 @@ import (
 	"github.com/0b0e0e7c/IM/service/user-service/pb/user"
 )
 
-type UserServer struct {
+type UserServiceServer struct {
 	svcCtx *svc.ServiceContext
-	user.UnimplementedUserServer
+	user.UnimplementedUserServiceServer
 }
 
-func NewUserServer(svcCtx *svc.ServiceContext) *UserServer {
-	return &UserServer{
+func NewUserServiceServer(svcCtx *svc.ServiceContext) *UserServiceServer {
+	return &UserServiceServer{
 		svcCtx: svcCtx,
 	}
 }
 
-func (s *UserServer) Register(ctx context.Context, in *user.RegisterRequest) (*user.RegisterResponse, error) {
+func (s *UserServiceServer) Register(ctx context.Context, in *user.RegisterRequest) (*user.RegisterResponse, error) {
 	l := logic.NewRegisterLogic(ctx, s.svcCtx)
 	return l.Register(in)
 }
 
-func (s *UserServer) Login(ctx context.Context, in *user.LoginRequest) (*user.LoginResponse, error) {
+func (s *UserServiceServer) Login(ctx context.Context, in *user.LoginRequest) (*user.LoginResponse, error) {
 	l := logic.NewLoginLogic(ctx, s.svcCtx)
 	return l.Login(in)
 }
 
-func (s *UserServer) ValidateJWT(ctx context.Context, in *user.ValidateRequest) (*user.ValidateResponse, error) {
+func (s *UserServiceServer) ValidateJWT(ctx context.Context, in *user.ValidateRequest) (*user.ValidateResponse, error) {
 	l := logic.NewValidateJWTLogic(ctx, s.svcCtx)
 	return l.ValidateJWT(in)
 }

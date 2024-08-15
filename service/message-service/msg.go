@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/0b0e0e7c/IM/service/user-service/internal/config"
-	"github.com/0b0e0e7c/IM/service/user-service/internal/server"
-	"github.com/0b0e0e7c/IM/service/user-service/internal/svc"
-	"github.com/0b0e0e7c/IM/service/user-service/pb/user"
+	"github.com/0b0e0e7c/IM/service/message-service/internal/config"
+	"github.com/0b0e0e7c/IM/service/message-service/internal/server"
+	"github.com/0b0e0e7c/IM/service/message-service/internal/svc"
+	"github.com/0b0e0e7c/IM/service/message-service/pb/msgservice"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/user.yaml", "the config file")
+var configFile = flag.String("f", "etc/msg.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		user.RegisterUserServiceServer(grpcServer, server.NewUserServiceServer(ctx))
+		msgservice.RegisterMessageServiceServer(grpcServer, server.NewMessageServiceServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

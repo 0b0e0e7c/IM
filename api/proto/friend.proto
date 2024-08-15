@@ -21,7 +21,7 @@ message GetFriendsResponse {
   repeated int64 friendIds = 1;
 }
 
-service Friend {
+service FriendService {
   rpc AddFriend(AddFriendRequest) returns (AddFriendResponse) {}
   rpc GetFriends(GetFriendsRequest) returns (GetFriendsResponse) {}
 }

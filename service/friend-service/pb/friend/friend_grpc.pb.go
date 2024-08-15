@@ -19,139 +19,139 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Friend_AddFriend_FullMethodName  = "/friend.Friend/AddFriend"
-	Friend_GetFriends_FullMethodName = "/friend.Friend/GetFriends"
+	FriendService_AddFriend_FullMethodName  = "/friend.FriendService/AddFriend"
+	FriendService_GetFriends_FullMethodName = "/friend.FriendService/GetFriends"
 )
 
-// FriendClient is the client API for Friend service.
+// FriendServiceClient is the client API for FriendService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type FriendClient interface {
+type FriendServiceClient interface {
 	AddFriend(ctx context.Context, in *AddFriendRequest, opts ...grpc.CallOption) (*AddFriendResponse, error)
 	GetFriends(ctx context.Context, in *GetFriendsRequest, opts ...grpc.CallOption) (*GetFriendsResponse, error)
 }
 
-type friendClient struct {
+type friendServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewFriendClient(cc grpc.ClientConnInterface) FriendClient {
-	return &friendClient{cc}
+func NewFriendServiceClient(cc grpc.ClientConnInterface) FriendServiceClient {
+	return &friendServiceClient{cc}
 }
 
-func (c *friendClient) AddFriend(ctx context.Context, in *AddFriendRequest, opts ...grpc.CallOption) (*AddFriendResponse, error) {
+func (c *friendServiceClient) AddFriend(ctx context.Context, in *AddFriendRequest, opts ...grpc.CallOption) (*AddFriendResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddFriendResponse)
-	err := c.cc.Invoke(ctx, Friend_AddFriend_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, FriendService_AddFriend_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *friendClient) GetFriends(ctx context.Context, in *GetFriendsRequest, opts ...grpc.CallOption) (*GetFriendsResponse, error) {
+func (c *friendServiceClient) GetFriends(ctx context.Context, in *GetFriendsRequest, opts ...grpc.CallOption) (*GetFriendsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetFriendsResponse)
-	err := c.cc.Invoke(ctx, Friend_GetFriends_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, FriendService_GetFriends_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// FriendServer is the server API for Friend service.
-// All implementations must embed UnimplementedFriendServer
+// FriendServiceServer is the server API for FriendService service.
+// All implementations must embed UnimplementedFriendServiceServer
 // for forward compatibility.
-type FriendServer interface {
+type FriendServiceServer interface {
 	AddFriend(context.Context, *AddFriendRequest) (*AddFriendResponse, error)
 	GetFriends(context.Context, *GetFriendsRequest) (*GetFriendsResponse, error)
-	mustEmbedUnimplementedFriendServer()
+	mustEmbedUnimplementedFriendServiceServer()
 }
 
-// UnimplementedFriendServer must be embedded to have
+// UnimplementedFriendServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedFriendServer struct{}
+type UnimplementedFriendServiceServer struct{}
 
-func (UnimplementedFriendServer) AddFriend(context.Context, *AddFriendRequest) (*AddFriendResponse, error) {
+func (UnimplementedFriendServiceServer) AddFriend(context.Context, *AddFriendRequest) (*AddFriendResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddFriend not implemented")
 }
-func (UnimplementedFriendServer) GetFriends(context.Context, *GetFriendsRequest) (*GetFriendsResponse, error) {
+func (UnimplementedFriendServiceServer) GetFriends(context.Context, *GetFriendsRequest) (*GetFriendsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFriends not implemented")
 }
-func (UnimplementedFriendServer) mustEmbedUnimplementedFriendServer() {}
-func (UnimplementedFriendServer) testEmbeddedByValue()                {}
+func (UnimplementedFriendServiceServer) mustEmbedUnimplementedFriendServiceServer() {}
+func (UnimplementedFriendServiceServer) testEmbeddedByValue()                       {}
 
-// UnsafeFriendServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to FriendServer will
+// UnsafeFriendServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to FriendServiceServer will
 // result in compilation errors.
-type UnsafeFriendServer interface {
-	mustEmbedUnimplementedFriendServer()
+type UnsafeFriendServiceServer interface {
+	mustEmbedUnimplementedFriendServiceServer()
 }
 
-func RegisterFriendServer(s grpc.ServiceRegistrar, srv FriendServer) {
-	// If the following call pancis, it indicates UnimplementedFriendServer was
+func RegisterFriendServiceServer(s grpc.ServiceRegistrar, srv FriendServiceServer) {
+	// If the following call pancis, it indicates UnimplementedFriendServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Friend_ServiceDesc, srv)
+	s.RegisterService(&FriendService_ServiceDesc, srv)
 }
 
-func _Friend_AddFriend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _FriendService_AddFriend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddFriendRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FriendServer).AddFriend(ctx, in)
+		return srv.(FriendServiceServer).AddFriend(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Friend_AddFriend_FullMethodName,
+		FullMethod: FriendService_AddFriend_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FriendServer).AddFriend(ctx, req.(*AddFriendRequest))
+		return srv.(FriendServiceServer).AddFriend(ctx, req.(*AddFriendRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Friend_GetFriends_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _FriendService_GetFriends_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetFriendsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FriendServer).GetFriends(ctx, in)
+		return srv.(FriendServiceServer).GetFriends(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Friend_GetFriends_FullMethodName,
+		FullMethod: FriendService_GetFriends_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FriendServer).GetFriends(ctx, req.(*GetFriendsRequest))
+		return srv.(FriendServiceServer).GetFriends(ctx, req.(*GetFriendsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Friend_ServiceDesc is the grpc.ServiceDesc for Friend service.
+// FriendService_ServiceDesc is the grpc.ServiceDesc for FriendService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Friend_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "friend.Friend",
-	HandlerType: (*FriendServer)(nil),
+var FriendService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "friend.FriendService",
+	HandlerType: (*FriendServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AddFriend",
-			Handler:    _Friend_AddFriend_Handler,
+			Handler:    _FriendService_AddFriend_Handler,
 		},
 		{
 			MethodName: "GetFriends",
-			Handler:    _Friend_GetFriends_Handler,
+			Handler:    _FriendService_GetFriends_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

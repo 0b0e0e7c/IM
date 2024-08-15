@@ -36,7 +36,7 @@ message ValidateResponse {
   bool valid = 1;
 }
 
-service User {
+service UserService {
   rpc Register(RegisterRequest) returns (RegisterResponse) {}
   rpc Login(LoginRequest) returns (LoginResponse) {}
   rpc ValidateJWT(ValidateRequest) returns (ValidateResponse) {}
