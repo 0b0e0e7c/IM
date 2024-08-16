@@ -20,12 +20,12 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	if err != nil {
 		panic("failed to connect database")
 	}
+	db.AutoMigrate(&model.User{})
 
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:     c.CacheRedis.Host,
 		Password: c.CacheRedis.Pass,
 	})
-	db.AutoMigrate(&model.User{})
 
 	return &ServiceContext{
 		Config: c,
