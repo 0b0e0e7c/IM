@@ -2,12 +2,15 @@ package logic
 
 import (
 	"context"
-	"strconv"
+	"encoding/json"
+	"fmt"
 	"time"
 
+	"github.com/0b0e0e7c/IM/component/common"
 	"github.com/0b0e0e7c/IM/model"
 	"github.com/0b0e0e7c/IM/service/message-service/internal/svc"
 	"github.com/0b0e0e7c/IM/service/message-service/pb/msgservice"
+	"github.com/go-redis/redis/v8"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -28,56 +31,59 @@ func NewSendMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SendM
 
 func (l *SendMessageLogic) SendMessage(in *msgservice.SendMessageRequest) (*msgservice.SendMessageResponse, error) {
 
-	u1, u2 := compareAndSwap(in.SenderId, in.ReceiverId)
+	lowerID, higherID := common.LowHigh(in.SenderId, in.ReceiverId)
 
-	if err := l.svcCtx.DB.Where("(user_id = ? AND friend_id = ? )  AND status = 1", u1, u2).First(&model.Friend{}).Error; err != nil {
+	if err := l.svcCtx.DB.Where("(user_id = ? AND friend_id = ? )  AND status = 1", lowerID, higherID).First(&model.Friend{}).Error; err != nil {
 		return nil, &MessageServiceError{Message: "sender and receiver are not friends"}
 	}
 
 	// create message
-	message := model.Message{
+	newMsg := model.Message{
 		SenderId:   in.SenderId,
 		ReceiverId: in.ReceiverId,
 		Content:    in.Content,
 		Timestamp:  time.Now(),
 	}
 
-	if err := l.svcCtx.DB.Create(&message).Error; err != nil {
+	if err := l.svcCtx.DB.Create(&newMsg).Error; err != nil {
 		return nil, &MessageServiceError{Message: "failed to create message"}
 	}
 
-	l.pushMsgToRedis(message.MsgID, message.SenderId, message.ReceiverId, message.Content, message.Timestamp)
+	logx.Infof("new message created: %+v", newMsg)
+
+	l.pushMsgToRedis(&newMsg)
 
 	return &msgservice.SendMessageResponse{
 		Success: true,
 	}, nil
 }
 
-func (l *SendMessageLogic) pushMsgToRedis(msgID, senderID, receiverID int64, content string, timestamp time.Time) error {
-	// make sure the key is always the same
-	var key string
-	lowerID, higherID := compareAndSwap(senderID, receiverID)
+func (l *SendMessageLogic) pushMsgToRedis(newMsg *model.Message) error {
+	lowerID, higherID := common.LowHigh(newMsg.SenderId, newMsg.ReceiverId)
 
-	key = "chat:" + strconv.FormatInt(lowerID, 10) + ":" + strconv.FormatInt(higherID, 10)
+	key := fmt.Sprintf("chat:%d-%d", lowerID, higherID)
 
-	// msgID|senderID|receiverID|content|timestamp
-	msgEntry := strconv.FormatInt(msgID, 10) + "|" +
-		strconv.FormatInt(senderID, 10) + "|" +
-		strconv.FormatInt(receiverID, 10) + "|" +
-		content + "|" +
-		timestamp.Format("2006-01-02 15:04:05")
+	msgEntry, err := json.Marshal(newMsg)
+	if err != nil {
+		return err
+	}
 
-	err := l.svcCtx.Redis.LPush(l.ctx, key, msgEntry).Err()
+	logx.Infof("put new message to Redis: %+v", newMsg)
+
+	// 使用 ZADD 将消息添加到有序集合中
+	err = l.svcCtx.Redis.ZAdd(l.ctx, key, &redis.Z{
+		Score:  float64(newMsg.MsgID),
+		Member: string(msgEntry),
+	}).Err()
+	if err != nil {
+		return err
+	}
+
+	// 保留最新的10条消息
+	err = l.svcCtx.Redis.ZRemRangeByRank(l.ctx, key, 0, -11).Err()
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func compareAndSwap(a, b int64) (int64, int64) {
-	if a > b {
-		return b, a
-	}
-	return a, b
 }
