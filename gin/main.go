@@ -13,17 +13,8 @@ import (
 )
 
 func main() {
-	// 创建 RPC 客户端配置
-	userClient, err := zrpc.NewClient(zrpc.RpcClientConf{
-		Etcd: discov.EtcdConf{
-			Hosts: []string{"127.0.0.1:2379"},
-			Key:   "user.rpc",
-		},
-	})
-	if err != nil {
-		panic(err)
-	}
-	userRPCClient := user.NewUserServiceClient(userClient.Conn())
+	userRPCClient := initUserRPCClient()
+	friendRPCClient := initFriendRPCClient()
 
 	r := gin.Default()
 
@@ -38,6 +29,34 @@ func main() {
 		handler.ValidateJWT(ctx, userRPCClient)
 	})
 
+	authGroup := r.Group("/api/friend")
+	authGroup.Use(middleware.JWTMiddleware(userRPCClient))
+	{
+		authGroup.POST("/add", func(ctx *gin.Context) {
+			handler.AddFriend(ctx, friendRPCClient)
+		})
+		authGroup.POST("/get", func(ctx *gin.Context) {
+			handler.GetFriends(ctx, friendRPCClient)
+		})
+	}
+
+	r.Run(":8888")
+}
+
+func initUserRPCClient() user.UserServiceClient {
+	userClient, err := zrpc.NewClient(zrpc.RpcClientConf{
+		Etcd: discov.EtcdConf{
+			Hosts: []string{"127.0.0.1:2379"},
+			Key:   "user.rpc",
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+	return user.NewUserServiceClient(userClient.Conn())
+}
+
+func initFriendRPCClient() friend.FriendServiceClient {
 	friendClient, err := zrpc.NewClient(zrpc.RpcClientConf{
 		Etcd: discov.EtcdConf{
 			Hosts: []string{"127.0.0.1:2379"},
@@ -47,18 +66,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fiendRPCClient := friend.NewFriendServiceClient(friendClient.Conn())
-
-	authGroup := r.Group("/api/friend")
-	authGroup.Use(middleware.JWTMiddleware(userRPCClient))
-	{
-		authGroup.POST("/add", func(ctx *gin.Context) {
-			handler.AddFriend(ctx, fiendRPCClient)
-		})
-		authGroup.POST("/get", func(ctx *gin.Context) {
-			handler.GetFriends(ctx, fiendRPCClient)
-		})
-	}
-
-	r.Run(":8888")
+	return friend.NewFriendServiceClient(friendClient.Conn())
 }
