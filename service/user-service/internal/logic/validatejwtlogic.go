@@ -25,11 +25,14 @@ func NewValidateJWTLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Valid
 }
 
 func (l *ValidateJWTLogic) ValidateJWT(in *user.ValidateRequest) (*user.ValidateResponse, error) {
-	valid, err := auth.ValidateToken(in.Token)
+	valid, uid, err := auth.ValidateToken(in.Token)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &user.ValidateResponse{Valid: valid}, nil
+	return &user.ValidateResponse{
+			Valid:  valid,
+			UserId: uid},
+		nil
 }

@@ -47,7 +47,7 @@ func (l *LoginLogic) Login(req *user.LoginRequest) (*user.LoginResponse, error) 
 	}
 
 	resp := &user.LoginResponse{
-		Id:       int64(loginUser.ID),
+		UserId:   int64(loginUser.ID),
 		Username: loginUser.Username,
 		Token:    token,
 		Success:  true,

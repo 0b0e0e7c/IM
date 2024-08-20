@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 var jwtSecret = []byte("user_service_secret")
@@ -54,10 +55,11 @@ func RefreshToken(userID int64, username string) (string, error) {
 	return GenerateToken(userID, username)
 }
 
-func ValidateToken(tokenString string) (bool, error) {
+func ValidateToken(tokenString string) (bool, int64, error) {
 	c, err := ParseToken(tokenString)
 	if c != nil {
-		return true, nil
+		logx.Info("token.uid: ", c.UserID)
+		return true, c.UserID, nil
 	}
-	return false, err
+	return false, 0, err
 }

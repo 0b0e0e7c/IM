@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"context"
@@ -55,7 +55,6 @@ func Login(c *gin.Context, client user.UserServiceClient) {
 	var req struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
-		Token    string `json:"token"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -66,7 +65,6 @@ func Login(c *gin.Context, client user.UserServiceClient) {
 	resp, err := client.Login(context.Background(), &user.LoginRequest{
 		Username: req.Username,
 		Password: req.Password,
-		Token:    req.Token,
 	})
 	if err != nil {
 		st, ok := status.FromError(err)
@@ -86,10 +84,10 @@ func Login(c *gin.Context, client user.UserServiceClient) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"username":    resp.Username,
-		"status":      resp.Success,
-		"msg-service": "success",
-		"token":       resp.Token,
+		"username": resp.Username,
+		"user_id":  resp.UserId,
+		"status":   "success",
+		"token":    resp.Token,
 	})
 }
 
