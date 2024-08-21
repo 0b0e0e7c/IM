@@ -54,4 +54,4 @@ goctl rpc protoc api/proto/user.proto  --go_out=./service/user-service/pb  --go-
 goctl rpc protoc api/proto/friend.proto  --go_out=./service/friend-service/pb  --go-grpc_out=./service/friend-service/pb  --zrpc_out=./service/friend-service
 `
 
-`goctl rpc protoc api/proto/msg.proto  --go_out=./service/message-service/pb  --go-grpc_out=./service/message-service/pb  --zrpc_out=./service/message-service`
+`goctl rpc protoc api/proto/message.proto  --go_out=./service/message-service/pb  --go-grpc_out=./service/message-service/pb  --zrpc_out=./service/message-service`

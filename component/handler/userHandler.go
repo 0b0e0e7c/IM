@@ -13,8 +13,8 @@ import (
 
 func Register(c *gin.Context, client user.UserServiceClient) {
 	var req struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
+		Username string `json:"username" binding:"required`
+		Password string `json:"password" binding:"required`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -30,31 +30,31 @@ func Register(c *gin.Context, client user.UserServiceClient) {
 		st, ok := status.FromError(err)
 		if !ok {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":      "failed",
-				"msg-service": err.Error(),
+				"status": "failed",
+				"msg":    err.Error(),
 			})
 		}
 
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":      "failed",
-			"msg-service": st.Message(),
+			"status": "failed",
+			"msg":    st.Message(),
 		})
 
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"id":          resp.UserId,
-		"username":    resp.Username,
-		"status":      "success",
-		"msg-service": "register success",
+		"id":       resp.UserId,
+		"username": resp.Username,
+		"status":   "success",
+		"msg":      "register success",
 	})
 }
 
 func Login(c *gin.Context, client user.UserServiceClient) {
 	var req struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
+		Username string `json:"username" binding:"required`
+		Password string `json:"password" binding:"required`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -70,14 +70,14 @@ func Login(c *gin.Context, client user.UserServiceClient) {
 		st, ok := status.FromError(err)
 		if !ok {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":      "failed",
-				"msg-service": err.Error(),
+				"status": "failed",
+				"msg":    err.Error(),
 			})
 		}
 
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":      "failed",
-			"msg-service": st.Message(),
+			"status": "failed",
+			"msg":    st.Message(),
 		})
 
 		return
@@ -93,7 +93,7 @@ func Login(c *gin.Context, client user.UserServiceClient) {
 
 func ValidateJWT(c *gin.Context, client user.UserServiceClient) {
 	var req struct {
-		Token string `json:"token"`
+		Token string `json:"token" binding:"required`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -109,14 +109,14 @@ func ValidateJWT(c *gin.Context, client user.UserServiceClient) {
 		st, ok := status.FromError(err)
 		if !ok {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":      "failed",
-				"msg-service": err.Error(),
+				"status": "failed",
+				"msg":    err.Error(),
 			})
 		}
 
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":      "failed",
-			"msg-service": st.Message(),
+			"status": "failed",
+			"msg":    st.Message(),
 		})
 
 		return

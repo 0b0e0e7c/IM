@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package msgservice;
+package message;
 
-option go_package = "/msgservice";
+option go_package = "/message";
 
 message Message {
     int64 msg_id = 1;
@@ -20,11 +20,10 @@ message SendMessageRequest {
 
 message SendMessageResponse {
     bool success = 1;
-    string error_message = 2; // 可选的错误信息
 }
 
 message GetMessagesRequest {
-    int64 requester_id = 1;     // 发起请求的用户ID
+    int64 user_id = 1;          // 发起请求的用户ID
     int64 peer_id = 2;          // 聊天对象的用户ID
     int64 limit = 3;            // 每次请求返回的最大消息数
     int64 offset = 4;           // 从第几条记录开始读取

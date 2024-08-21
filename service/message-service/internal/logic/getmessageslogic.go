@@ -8,9 +8,9 @@ import (
 	"github.com/0b0e0e7c/IM/component/common"
 	"github.com/0b0e0e7c/IM/model"
 	"github.com/0b0e0e7c/IM/service/message-service/internal/svc"
-	"github.com/0b0e0e7c/IM/service/message-service/pb/msgservice"
-	"github.com/go-redis/redis/v8"
+	"github.com/0b0e0e7c/IM/service/message-service/pb/message"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -28,8 +28,8 @@ func NewGetMessagesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetMe
 	}
 }
 
-func (l *GetMessagesLogic) GetMessages(in *msgservice.GetMessagesRequest) (*msgservice.GetMessagesResponse, error) {
-	lowerID, higherID := common.LowHigh(in.RequesterId, in.PeerId)
+func (l *GetMessagesLogic) GetMessages(in *message.GetMessagesRequest) (*message.GetMessagesResponse, error) {
+	lowerID, higherID := common.LowHigh(in.UserId, in.PeerId)
 
 	if in.Limit == 0 {
 		in.Limit = 100
@@ -51,9 +51,9 @@ func (l *GetMessagesLogic) GetMessages(in *msgservice.GetMessagesRequest) (*msgs
 		l.pushMsgToRedis(lowerID, higherID, messages)
 	}
 
-	var msgList []*msgservice.Message
+	var msgList []*message.Message
 	for _, msg := range messages {
-		msgList = append(msgList, &msgservice.Message{
+		msgList = append(msgList, &message.Message{
 			MsgId:      msg.MsgID,
 			SenderId:   msg.SenderId,
 			ReceiverId: msg.ReceiverId,
@@ -62,7 +62,7 @@ func (l *GetMessagesLogic) GetMessages(in *msgservice.GetMessagesRequest) (*msgs
 		})
 	}
 
-	return &msgservice.GetMessagesResponse{
+	return &message.GetMessagesResponse{
 		Messages: msgList,
 	}, nil
 }

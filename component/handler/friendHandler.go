@@ -12,7 +12,7 @@ import (
 
 func AddFriend(c *gin.Context, client friend.FriendServiceClient) {
 	var req struct {
-		FriendID int64 `json:"friend_id"`
+		FriendID int64 `json:"friend_id" binding:"required"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -27,7 +27,7 @@ func AddFriend(c *gin.Context, client friend.FriendServiceClient) {
 
 	logx.Info("userID: ", userID)
 
-	resp, err := client.AddFriend(context.Background(), &friend.AddFriendRequest{
+	_, err := client.AddFriend(context.Background(), &friend.AddFriendRequest{
 		UserId:   userID.(int64),
 		FriendId: req.FriendID,
 	})
@@ -35,28 +35,27 @@ func AddFriend(c *gin.Context, client friend.FriendServiceClient) {
 		st, ok := status.FromError(err)
 		if !ok {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":      "failed",
-				"msg-service": err.Error(),
+				"status": "failed",
+				"msg":    err.Error(),
 			})
 		}
 
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":      "failed",
-			"msg-service": st.Message(),
+			"status": "failed",
+			"msg":    st.Message(),
 		})
 
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"status":      resp.Success,
-		"msg-service": "success",
+		"status": "success",
 	})
 }
 
 func GetFriends(c *gin.Context, client friend.FriendServiceClient) {
 	var req struct {
-		UserID int64 `json:"user_id"`
+		UserID int64 `json:"user_id" binding:"required"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -71,14 +70,14 @@ func GetFriends(c *gin.Context, client friend.FriendServiceClient) {
 		st, ok := status.FromError(err)
 		if !ok {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":      "failed",
-				"msg-service": err.Error(),
+				"status": "failed",
+				"msg":    err.Error(),
 			})
 		}
 
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":      "failed",
-			"msg-service": st.Message(),
+			"status": "failed",
+			"msg":    st.Message(),
 		})
 
 		return

@@ -26,7 +26,7 @@ func JWTMiddleware(userRPCClient user.UserServiceClient) gin.HandlerFunc {
 			return
 		}
 
-		// 调用 ValidateJWT RPC 方法
+		// 调用 RPC 方法
 		resp, err := userRPCClient.ValidateJWT(context.Background(), &user.ValidateRequest{Token: token})
 		if err != nil || !resp.Valid {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})

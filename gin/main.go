@@ -4,6 +4,7 @@ import (
 	"github.com/0b0e0e7c/IM/component/handler"
 	"github.com/0b0e0e7c/IM/component/middleware"
 	"github.com/0b0e0e7c/IM/service/friend-service/pb/friend"
+	"github.com/0b0e0e7c/IM/service/message-service/pb/message"
 	"github.com/0b0e0e7c/IM/service/user-service/pb/user"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,7 @@ import (
 func main() {
 	userRPCClient := initUserRPCClient()
 	friendRPCClient := initFriendRPCClient()
+	msgRPCClient := initMsgRPCClient()
 
 	r := gin.Default()
 
@@ -29,14 +31,27 @@ func main() {
 		handler.ValidateJWT(ctx, userRPCClient)
 	})
 
-	authGroup := r.Group("/api/friend")
-	authGroup.Use(middleware.JWTMiddleware(userRPCClient))
+	friendGroup := r.Group("/api/friend")
+	friendGroup.Use(middleware.JWTMiddleware(userRPCClient))
 	{
-		authGroup.POST("/add", func(ctx *gin.Context) {
+		friendGroup.POST("/add", func(ctx *gin.Context) {
 			handler.AddFriend(ctx, friendRPCClient)
 		})
-		authGroup.POST("/get", func(ctx *gin.Context) {
+		friendGroup.POST("/get", func(ctx *gin.Context) {
 			handler.GetFriends(ctx, friendRPCClient)
+		})
+
+	}
+
+	messageGroup := r.Group("/api/message")
+	messageGroup.Use(middleware.JWTMiddleware(userRPCClient))
+	{
+		messageGroup.POST("/send", func(ctx *gin.Context) {
+			handler.SendMsg(ctx, msgRPCClient)
+		})
+
+		messageGroup.POST("/get", func(ctx *gin.Context) {
+			handler.GetMsg(ctx, msgRPCClient)
 		})
 	}
 
@@ -67,4 +82,17 @@ func initFriendRPCClient() friend.FriendServiceClient {
 		panic(err)
 	}
 	return friend.NewFriendServiceClient(friendClient.Conn())
+}
+
+func initMsgRPCClient() message.MessageServiceClient {
+	messageClient, err := zrpc.NewClient(zrpc.RpcClientConf{
+		Etcd: discov.EtcdConf{
+			Hosts: []string{"127.0.0.1:2379"},
+			Key:   "message.rpc",
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+	return message.NewMessageServiceClient(messageClient.Conn())
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/0b0e0e7c/IM/component/common"
 	"github.com/0b0e0e7c/IM/model"
 	"github.com/0b0e0e7c/IM/service/message-service/internal/svc"
-	"github.com/0b0e0e7c/IM/service/message-service/pb/msgservice"
+	"github.com/0b0e0e7c/IM/service/message-service/pb/message"
 	"github.com/go-redis/redis/v8"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -29,7 +29,7 @@ func NewSendMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SendM
 	}
 }
 
-func (l *SendMessageLogic) SendMessage(in *msgservice.SendMessageRequest) (*msgservice.SendMessageResponse, error) {
+func (l *SendMessageLogic) SendMessage(in *message.SendMessageRequest) (*message.SendMessageResponse, error) {
 
 	lowerID, higherID := common.LowHigh(in.SenderId, in.ReceiverId)
 
@@ -53,7 +53,7 @@ func (l *SendMessageLogic) SendMessage(in *msgservice.SendMessageRequest) (*msgs
 
 	l.pushMsgToRedis(&newMsg)
 
-	return &msgservice.SendMessageResponse{
+	return &message.SendMessageResponse{
 		Success: true,
 	}, nil
 }
