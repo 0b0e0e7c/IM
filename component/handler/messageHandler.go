@@ -55,14 +55,6 @@ func SendMsg(c *gin.Context, client message.MessageServiceClient) {
 	})
 }
 
-type Message struct {
-	MsgId      int64  `json:"msg_id"`
-	SenderId   int64  `json:"sender_id"`
-	ReceiverId int64  `json:"receiver_id"`
-	Content    string `json:"content"`
-	Timestamp  int64  `json:"timestamp"`
-}
-
 func GetMsg(c *gin.Context, client message.MessageServiceClient) {
 	var req struct {
 		PeerId int64 `json:"peer_id" binding:"required"`

@@ -13,8 +13,8 @@ import (
 
 func Register(c *gin.Context, client user.UserServiceClient) {
 	var req struct {
-		Username string `json:"username" binding:"required`
-		Password string `json:"password" binding:"required`
+		Username string `json:"username" binding:"required"`
+		Password string `json:"password" binding:"required"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -53,8 +53,8 @@ func Register(c *gin.Context, client user.UserServiceClient) {
 
 func Login(c *gin.Context, client user.UserServiceClient) {
 	var req struct {
-		Username string `json:"username" binding:"required`
-		Password string `json:"password" binding:"required`
+		Username string `json:"username" binding:"required"`
+		Password string `json:"password" binding:"required"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -93,7 +93,7 @@ func Login(c *gin.Context, client user.UserServiceClient) {
 
 func ValidateJWT(c *gin.Context, client user.UserServiceClient) {
 	var req struct {
-		Token string `json:"token" binding:"required`
+		Token string `json:"token" binding:"required"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -123,6 +123,7 @@ func ValidateJWT(c *gin.Context, client user.UserServiceClient) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"valid": resp.Valid,
+		"valid":   resp.Valid,
+		"user_id": resp.UserId,
 	})
 }

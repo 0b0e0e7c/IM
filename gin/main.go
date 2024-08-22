@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/0b0e0e7c/IM/component/handler"
 	"github.com/0b0e0e7c/IM/component/middleware"
 	"github.com/0b0e0e7c/IM/service/friend-service/pb/friend"
@@ -66,7 +68,8 @@ func initUserRPCClient() user.UserServiceClient {
 		},
 	})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return nil
 	}
 	return user.NewUserServiceClient(userClient.Conn())
 }
@@ -79,7 +82,8 @@ func initFriendRPCClient() friend.FriendServiceClient {
 		},
 	})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return nil
 	}
 	return friend.NewFriendServiceClient(friendClient.Conn())
 }
@@ -92,7 +96,8 @@ func initMsgRPCClient() message.MessageServiceClient {
 		},
 	})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return nil
 	}
 	return message.NewMessageServiceClient(messageClient.Conn())
 }

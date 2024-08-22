@@ -19,6 +19,7 @@ func AddFriend(c *gin.Context, client friend.FriendServiceClient) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	userID, exists := c.Get("userID")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "user not found"})
@@ -54,17 +55,14 @@ func AddFriend(c *gin.Context, client friend.FriendServiceClient) {
 }
 
 func GetFriends(c *gin.Context, client friend.FriendServiceClient) {
-	var req struct {
-		UserID int64 `json:"user_id" binding:"required"`
-	}
-
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "user not found"})
 		return
 	}
 
 	resp, err := client.GetFriends(context.Background(), &friend.GetFriendsRequest{
-		UserId: req.UserID,
+		UserId: userID.(int64),
 	})
 	if err != nil {
 		st, ok := status.FromError(err)

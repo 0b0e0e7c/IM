@@ -46,12 +46,17 @@ graph TD
 
 ## 生成代码
 
-`
-goctl rpc protoc api/proto/user.proto  --go_out=./service/user-service/pb  --go-grpc_out=./service/user-service/pb  --zrpc_out=./service/user-service
-`
+`goctl rpc protoc api/proto/user.proto  --go_out=./service/user-service/pb  --go-grpc_out=./service/user-service/pb  --zrpc_out=./service/user-service`
 
-`
-goctl rpc protoc api/proto/friend.proto  --go_out=./service/friend-service/pb  --go-grpc_out=./service/friend-service/pb  --zrpc_out=./service/friend-service
-`
+`goctl rpc protoc api/proto/friend.proto  --go_out=./service/friend-service/pb  --go-grpc_out=./service/friend-service/pb  --zrpc_out=./service/friend-service`
 
 `goctl rpc protoc api/proto/message.proto  --go_out=./service/message-service/pb  --go-grpc_out=./service/message-service/pb  --zrpc_out=./service/message-service`
+
+##
+依赖组件
+`docker compose up -d`
+
+构建
+`make all`
+
+

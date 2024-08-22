@@ -7,7 +7,14 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-var jwtSecret = []byte("user_service_secret")
+const (
+	TokenExpireDuration = time.Hour * 24
+)
+
+var (
+	jwtSecret       = []byte("some_secret")
+	ErrInvalidToken = jwt.ErrTokenExpired
+)
 
 type Claims struct {
 	UserID   int64  `json:"user_id"`
@@ -16,14 +23,14 @@ type Claims struct {
 }
 
 func GenerateToken(userID int64, username string) (string, error) {
-	// now := time.Now()
+	now := time.Now()
 	claims := Claims{
 		UserID:   userID,
 		Username: username,
 		RegisteredClaims: jwt.RegisteredClaims{
-			// ExpiresAt: jwt.NewNumericDate(now.Add(24 * time.Hour)),
-			// IssuedAt:  jwt.NewNumericDate(now),
-			Issuer: "user-service",
+			ExpiresAt: jwt.NewNumericDate(now.Add(TokenExpireDuration)),
+			IssuedAt:  jwt.NewNumericDate(now),
+			Issuer:    "IM_service",
 		},
 	}
 
@@ -45,10 +52,6 @@ func ParseToken(tokenString string) (*Claims, error) {
 	}
 
 	return nil, err
-}
-
-func Expire(c *Claims) bool {
-	return time.Now().After(c.ExpiresAt.Time)
 }
 
 func RefreshToken(userID int64, username string) (string, error) {

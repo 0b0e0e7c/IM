@@ -2,10 +2,12 @@ package logic
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/0b0e0e7c/IM/component/auth"
 	"github.com/0b0e0e7c/IM/service/user-service/internal/svc"
 	"github.com/0b0e0e7c/IM/service/user-service/pb/user"
+	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,8 +27,26 @@ func NewValidateJWTLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Valid
 }
 
 func (l *ValidateJWTLogic) ValidateJWT(in *user.ValidateRequest) (*user.ValidateResponse, error) {
-	valid, uid, err := auth.ValidateToken(in.Token)
+	// check if the token is in redis
+	uidStr, err := l.svcCtx.Redis.Get(l.ctx, in.Token).Result()
+	if err == nil {
+		uid, err := strconv.ParseInt(uidStr, 10, 64)
+		if err == nil {
+			logx.Info("get uid with token from redis:", uid)
+			return &user.ValidateResponse{
+				Valid:  true,
+				UserId: uid,
+			}, nil
+		}
+		logx.Info("parse uid from redis failed")
+	} else {
+		logx.Info("token not found in redis")
+	}
 
+	valid, uid, err := auth.ValidateToken(in.Token)
+	if errors.Is(err, auth.ErrInvalidToken) {
+		logx.Info("token expired")
+	}
 	if err != nil {
 		return nil, err
 	}
