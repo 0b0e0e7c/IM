@@ -6,7 +6,7 @@ package messageservice
 import (
 	"context"
 
-	"github.com/0b0e0e7c/IM/service/message-service/pb/message"
+	"github.com/0b0e0e7c/chat/service/message-service/pb/message"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

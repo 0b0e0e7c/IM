@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/0b0e0e7c/IM/component/common"
-	"github.com/0b0e0e7c/IM/model"
-	"github.com/0b0e0e7c/IM/service/message-service/internal/svc"
-	"github.com/0b0e0e7c/IM/service/message-service/pb/message"
+	"github.com/0b0e0e7c/chat/component/common"
+	"github.com/0b0e0e7c/chat/model"
+	"github.com/0b0e0e7c/chat/service/message-service/internal/svc"
+	"github.com/0b0e0e7c/chat/service/message-service/pb/message"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/zeromicro/go-zero/core/logx"

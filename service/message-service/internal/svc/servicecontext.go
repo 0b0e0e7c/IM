@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"github.com/0b0e0e7c/IM/model"
-	"github.com/0b0e0e7c/IM/service/message-service/internal/config"
+	"github.com/0b0e0e7c/chat/model"
+	"github.com/0b0e0e7c/chat/service/message-service/internal/config"
 	"github.com/go-redis/redis/v8"
 
 	"gorm.io/driver/mysql"

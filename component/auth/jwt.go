@@ -13,6 +13,7 @@ const (
 
 var (
 	jwtSecret       = []byte("some_secret")
+	Issuer          = "chat_service"
 	ErrInvalidToken = jwt.ErrTokenExpired
 )
 
@@ -30,7 +31,7 @@ func GenerateToken(userID int64, username string) (string, error) {
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(now.Add(TokenExpireDuration)),
 			IssuedAt:  jwt.NewNumericDate(now),
-			Issuer:    "IM_service",
+			Issuer:    Issuer,
 		},
 	}
 

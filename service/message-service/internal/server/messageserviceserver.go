@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"github.com/0b0e0e7c/IM/service/message-service/internal/logic"
-	"github.com/0b0e0e7c/IM/service/message-service/internal/svc"
-	"github.com/0b0e0e7c/IM/service/message-service/pb/message"
+	"github.com/0b0e0e7c/chat/service/message-service/internal/logic"
+	"github.com/0b0e0e7c/chat/service/message-service/internal/svc"
+	"github.com/0b0e0e7c/chat/service/message-service/pb/message"
 )
 
 type MessageServiceServer struct {

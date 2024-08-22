@@ -4,9 +4,9 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/0b0e0e7c/IM/component/auth"
-	"github.com/0b0e0e7c/IM/service/user-service/internal/svc"
-	"github.com/0b0e0e7c/IM/service/user-service/pb/user"
+	"github.com/0b0e0e7c/chat/component/auth"
+	"github.com/0b0e0e7c/chat/service/user-service/internal/svc"
+	"github.com/0b0e0e7c/chat/service/user-service/pb/user"
 	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"

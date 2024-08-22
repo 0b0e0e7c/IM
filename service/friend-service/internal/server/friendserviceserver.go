@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"github.com/0b0e0e7c/IM/service/friend-service/internal/logic"
-	"github.com/0b0e0e7c/IM/service/friend-service/internal/svc"
-	"github.com/0b0e0e7c/IM/service/friend-service/pb/friend"
+	"github.com/0b0e0e7c/chat/service/friend-service/internal/logic"
+	"github.com/0b0e0e7c/chat/service/friend-service/internal/svc"
+	"github.com/0b0e0e7c/chat/service/friend-service/pb/friend"
 )
 
 type FriendServiceServer struct {

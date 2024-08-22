@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/0b0e0e7c/IM/service/friend-service/pb/friend"
+	"github.com/0b0e0e7c/chat/service/friend-service/pb/friend"
 	"github.com/gin-gonic/gin"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/status"

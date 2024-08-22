@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/0b0e0e7c/IM/service/user-service/internal/config"
-	"github.com/0b0e0e7c/IM/service/user-service/internal/server"
-	"github.com/0b0e0e7c/IM/service/user-service/internal/svc"
-	"github.com/0b0e0e7c/IM/service/user-service/pb/user"
+	"github.com/0b0e0e7c/chat/service/user-service/internal/config"
+	"github.com/0b0e0e7c/chat/service/user-service/internal/server"
+	"github.com/0b0e0e7c/chat/service/user-service/internal/svc"
+	"github.com/0b0e0e7c/chat/service/user-service/pb/user"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

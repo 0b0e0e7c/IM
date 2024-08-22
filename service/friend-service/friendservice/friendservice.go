@@ -6,7 +6,7 @@ package friendservice
 import (
 	"context"
 
-	"github.com/0b0e0e7c/IM/service/friend-service/pb/friend"
+	"github.com/0b0e0e7c/chat/service/friend-service/pb/friend"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

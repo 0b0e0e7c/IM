@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/0b0e0e7c/IM/component/handler"
-	"github.com/0b0e0e7c/IM/component/middleware"
-	"github.com/0b0e0e7c/IM/service/friend-service/pb/friend"
-	"github.com/0b0e0e7c/IM/service/message-service/pb/message"
-	"github.com/0b0e0e7c/IM/service/user-service/pb/user"
+	"github.com/0b0e0e7c/chat/component/handler"
+	"github.com/0b0e0e7c/chat/component/middleware"
+	"github.com/0b0e0e7c/chat/service/friend-service/pb/friend"
+	"github.com/0b0e0e7c/chat/service/message-service/pb/message"
+	"github.com/0b0e0e7c/chat/service/user-service/pb/user"
 
 	"github.com/gin-gonic/gin"
 
@@ -39,7 +39,7 @@ func main() {
 		friendGroup.POST("/add", func(ctx *gin.Context) {
 			handler.AddFriend(ctx, friendRPCClient)
 		})
-		friendGroup.POST("/get", func(ctx *gin.Context) {
+		friendGroup.GET("/get", func(ctx *gin.Context) {
 			handler.GetFriends(ctx, friendRPCClient)
 		})
 
@@ -52,7 +52,7 @@ func main() {
 			handler.SendMsg(ctx, msgRPCClient)
 		})
 
-		messageGroup.POST("/get", func(ctx *gin.Context) {
+		messageGroup.GET("/get", func(ctx *gin.Context) {
 			handler.GetMsg(ctx, msgRPCClient)
 		})
 	}

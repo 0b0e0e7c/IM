@@ -1,4 +1,4 @@
-module github.com/0b0e0e7c/IM
+module github.com/0b0e0e7c/chat
 
 go 1.22.5
 

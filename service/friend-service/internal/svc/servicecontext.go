@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"github.com/0b0e0e7c/IM/model"
-	"github.com/0b0e0e7c/IM/service/friend-service/internal/config"
+	"github.com/0b0e0e7c/chat/model"
+	"github.com/0b0e0e7c/chat/service/friend-service/internal/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
