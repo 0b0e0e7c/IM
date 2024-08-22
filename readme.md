@@ -1,4 +1,4 @@
-## 前置知识
+## 学习计划
 
 1. ~~Git 常用命令~~
 
@@ -16,31 +16,49 @@
 
 8. ~~Docker 基础~~
 
-## 项目实战:
+## 项目:
 
 开发一个简单的聊天工具后台系统
 
-1. 采取微服务架构，包括但不限于用户服务、消息服务、好友服务， 仅需实现用户注册、登录、添加好友、发送消息等基本功能就行
-2. 需要采用的技术栈
+| 服务名称 | 功能描述 | 状态 |
+|--------|-----------|---|
+| 用户服务 | 用户注册、登录 |✅ |
+| 消息服务 | 发送消息 |✅ |
+| 好友服务 | 添加好友 |✅ |
+
+
+### 需要采用的技术栈
    1. Golang
    2. [Gin](https://gin-gonic.com/zh-cn/docs/introduction/)作为 Web 框架
    3. [Gorm](https://gorm.io/zh_CN/docs/index.html)作为 ORM 框架
    4. [Go-Zero](https://go-zero.dev/)作为微服务框架
    5. Redis 作为缓存中间件
    6. Mysql 作为数据库
-3. 依赖组件如 mysql、redis、etcd 等可以采用 docker 容器化部署
+1. 依赖组件如 mysql、redis、etcd 等可以采用 docker 容器化部署
 
 ## 项目架构图
 
 ```mermaid
 graph TD
     A[Client] -->|HTTP Request| B[Gin API Module]
-    B --> C[Service Discovery]
-    C --> D[Go-Zero RPC Module]
-    D -->|Database/Logic| E[Database]
-    D -->|Business Logic| F[Logic Processing]
-    D --> C
-    C --> B
+    B --> C{JWT Token?}
+    C -->|Yes| D[Service Discovery]
+    C -->|No| E[Unauthorized]
+    D -->|Login/Register|H[Proceed to Requested Service]
+    D -->|need JWT validate|G[User Service]
+    G -->|Validate JWT| I{Valid Token?}
+    I -->|No| E
+    I -->|Yes| H[Proceed to Requested Service]
+    H --> J[Friend Service]
+    H --> K[Message Service]
+    H --> L[User Service]
+    J --> M[Database/Logic]
+    K --> M
+    L --> M
+    M --> N[Logic Processing]
+    N --> O[Service Response]
+    O --> D
+    D --> B
     B -->|HTTP Response| A
 ```
 
@@ -53,10 +71,9 @@ graph TD
 `goctl rpc protoc api/proto/message.proto  --go_out=./service/message-service/pb  --go-grpc_out=./service/message-service/pb  --zrpc_out=./service/message-service`
 
 ##
+
 依赖组件
 `docker compose up -d`
 
 构建
 `make all`
-
-
