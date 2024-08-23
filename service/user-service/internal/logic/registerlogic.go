@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"errors"
 
-	"github.com/0b0e0e7c/chat/model"
 	"github.com/0b0e0e7c/chat/service/user-service/internal/svc"
 	"github.com/0b0e0e7c/chat/service/user-service/pb/user"
 
@@ -32,14 +31,10 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 		return nil, errors.New("username or password is empty")
 	}
 
-	newUser := model.User{
-		Username: in.Username,
-		Password: hashing(in.Username, in.Password),
-	}
-
-	result := l.svcCtx.DB.Create(&newUser)
-	if result.Error != nil {
-		return nil, result.Error
+	userDao := l.svcCtx.GetUserDAO()
+	newUser, err := userDao.CreateUserByUsernameAndPassword(in.Username, Hashing(in.Username, in.Password))
+	if err != nil {
+		return nil, err
 	}
 
 	resp := &user.RegisterResponse{
@@ -51,7 +46,7 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 	return resp, nil
 }
 
-func hashing(username, password string) string {
+func Hashing(username, password string) string {
 	hash := sha256.New()
 
 	hash.Write([]byte(username + password))

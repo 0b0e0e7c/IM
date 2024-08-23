@@ -2,11 +2,9 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/0b0e0e7c/chat/component/auth"
-	"github.com/0b0e0e7c/chat/model"
 	"github.com/0b0e0e7c/chat/service/user-service/internal/svc"
 	"github.com/0b0e0e7c/chat/service/user-service/pb/user"
 
@@ -28,10 +26,13 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 }
 
 func (l *LoginLogic) Login(req *user.LoginRequest) (*user.LoginResponse, error) {
-	var loginUser model.User
-	result := l.svcCtx.DB.Where("username = ? AND password = ?", req.Username, hashing(req.Username, req.Password)).First(&loginUser)
-	if result.Error != nil {
-		return nil, errors.New("invalid username or password")
+	hashedPassword := Hashing(req.Username, req.Password)
+
+	userDAO := l.svcCtx.GetUserDAO()
+
+	loginUser, err := userDAO.FindUserByUsernameAndPassword(req.Username, hashedPassword)
+	if err != nil {
+		return nil, err
 	}
 
 	// 生成JWT令牌
@@ -46,6 +47,7 @@ func (l *LoginLogic) Login(req *user.LoginRequest) (*user.LoginResponse, error) 
 		return nil, err
 	}
 
+	// 返回登录响应
 	resp := &user.LoginResponse{
 		UserId:   int64(loginUser.ID),
 		Username: loginUser.Username,
