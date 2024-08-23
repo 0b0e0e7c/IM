@@ -23,19 +23,19 @@ func TestParseToken_Expired(t *testing.T) {
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(now.Add(-1 * time.Hour)), // 设置为1小时前过期
 			IssuedAt:  jwt.NewNumericDate(now.Add(-2 * time.Hour)), // 设置为2小时前签发
-			Issuer:    "IM_service",
+			Issuer:    Issuer,
 		},
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(jwtSecret)
+	token := jwt.NewWithClaims(jwt.SigningMethodEdDSA, claims)
+	tokenString, err := token.SignedString(privateKey)
 	assert.NoError(t, err)
 
 	// 解析 token
 	parsedClaims, err := ParseToken(tokenString)
 	assert.Error(t, err)
 	assert.Nil(t, parsedClaims)
-	assert.ErrorIs(t, err, ErrInvalidToken)
+	assert.ErrorIs(t, err, jwt.ErrTokenExpired)
 }
 
 func TestParseToken_Valid(t *testing.T) {
@@ -50,5 +50,5 @@ func TestParseToken_Valid(t *testing.T) {
 }
 
 func TestErrEqual(t *testing.T) {
-	assert.Equal(t, ErrInvalidToken, jwt.ErrTokenExpired)
+	assert.Equal(t, ErrTokenExpired, jwt.ErrTokenExpired)
 }

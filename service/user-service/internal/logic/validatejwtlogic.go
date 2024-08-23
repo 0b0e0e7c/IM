@@ -44,7 +44,7 @@ func (l *ValidateJWTLogic) ValidateJWT(in *user.ValidateRequest) (*user.Validate
 	}
 
 	valid, uid, err := auth.ValidateToken(in.Token)
-	if errors.Is(err, auth.ErrInvalidToken) {
+	if errors.Is(err, auth.ErrTokenExpired) {
 		logx.Info("token expired")
 	}
 	if err != nil {
